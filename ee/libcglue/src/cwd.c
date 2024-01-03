@@ -143,12 +143,12 @@ int __path_absolute(const char *in, char *out, int len)
 
 	/* See what the relative URL starts with */
 	dr = __get_drive(in);
-	if(dr > 0 && in[dr] == '/') {
-		/* It starts with "drive:/", so it's already absolute */
+	if(dr > 0 && (in[dr] == '/' || in[dr] == '\\')) {
+		/* It starts with "drive:/" or "drive:\", so it's already absolute */
 		if(!__safe_strcpy(out, in, len))
 			return -1;
 	} else if(dr > 0 && in[dr - 1] == ':') {
-		/* It starts with "drive:", so it's already absoulte, however it misses the "/" after unit */
+		/* It starts with "drive:", so it's already absolute, however it misses the "/" after unit */
 		/* Just do it if drive: is different than rom0:, rom1:, rom2: .. rom9: */
 		if (strncmp(in, "rom", 3) == 0 && in[3] >= '0' && in[3] <= '9' && in[4] == ':') {
 			if(!__safe_strcpy(out, in, len))
